@@ -6,21 +6,29 @@ function setup() {
 
 function draw() {
   background(0);
-  const n = 50; // TODO 100
+  const n = 10; // TODO 100
   let x = width / 4;
   let y = height / 5;
   const pas = y * 3 / n;
 
-  stroke(255);
+  stroke(255); // couleur des lignes
+  noFill();
+  // curveTightness(3);
   for(let i = 0; i < n; i++){
-    line(x, y + i * pas, x * 3, y + i * pas); // TODO à supp, test pour le pas
-    // let progress = x;
-    // while(progress < x * 3){
-      // let noiseVal = noise((y + i * pas) * pas);
-      // if(progress <  x * 2 / 3 || progress >  x * 2 * 2/ 3){
+    let noiseVal =  noise(pas) * pas;
 
-      // }
-      // progress += 5;
-    // }
+    beginShape();
+    curveVertex(x,  y + i * pas); // début
+      /* 
+        Note : il faut au minimum 4 appel de la fonction 
+        pour que ça affiche quelque chose
+      */
+    curveVertex(x, y + i * pas - noiseVal);
+    curveVertex(x + x/3, y + i * pas - noiseVal);
+    curveVertex(x * 3 - 2*x/3,  y + i * pas - noiseVal);
+    curveVertex(x * 3,  y + i * pas - noiseVal);
+
+    curveVertex(x * 3,  y + i * pas); // fin
+    endShape();
   }
 }
