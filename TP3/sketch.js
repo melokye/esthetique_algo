@@ -20,7 +20,7 @@ function draw(){
     // progress += pic(progress, x + x / 3, y + i * pas, pas / 2);
     // progress += pic(progress, x + x / 3, y + i * pas, pas);
     // progress += pic(progress, x + x / 3, y + i * pas, pas / 2);
-    line(x , y + i * pas, width - x, y + i * pas);
+    line(width - x - 2*x / 3 , y + i * pas, width - x, y + i * pas);
   }  
 
   stroke(250, 0, 0); // couleur des lignes
