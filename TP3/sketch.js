@@ -1,7 +1,7 @@
 function setup() {
-  const CANVA_SIZE = 700; // TODO à modifier dans les autres TP
+  const CANVA_SIZE = 500;
   createCanvas(CANVA_SIZE, CANVA_SIZE);
-  frameRate(1);
+  frameRate(1); // TODO, vu que noise ne bouge pas, autant ne l'executer qu'une fois
 }
 
 function draw(){
@@ -9,26 +9,45 @@ function draw(){
   const x = width / 4, y = height / 5;
   const pas = y * 3 / n;
 
-  let noiseVal =  noise(pas) * pas;
+  let noiseVal =  noise(pas) * pas; // non utilisé encore
   background(0);
   stroke(255); // couleur des lignes
-  noFill(); // TODO peut être ineressant de mettre fill en noir
 
   for (let i = 0; i < n; i++) {
     let progress = x;
-    line(x, y + i * pas, x + 2*x / 3, y + i * pas);
-    // progress += pic(progress, x + x / 3, y + i * pas, pas / 2);
-    // progress += pic(progress, x + x / 3, y + i * pas, pas);
-    // progress += pic(progress, x + x / 3, y + i * pas, pas / 2);
-    line(width - x - 2*x / 3 , y + i * pas, width - x, y + i * pas);
+    line(x, y + i * pas, 
+         x + 2*x / 3, y + i * pas); // début
+    
+    let j = x + 2/3 * x;
+    let wave = y + i*pas;
+    
+    while(j < width - x - 2*x / 3){
+      let end = noise(j) * n;
+      wave = pic(j, end + j, wave, pas);
+      j += end;
+      
+      end = noise(j) * n;
+      wave = pic(j, end + j, wave, - 1/2 * pas);
+      j += end;
+    }
+    
+    
+    
+    line(width - x - 2*x / 3 , y + i * pas, 
+         width - x, y + i * pas); // fin
   }  
 
-  stroke(250, 0, 0); // couleur des lignes
-  line(x, y, x * 3, y); // TODO à supp, test pour le pas
+  // TODO à supp, test / ref
+  stroke(250, 0, 0);
+  line(x, y, x * 3, y);
+  //
 }
 
-function pic(x, x_max, y, y_max){
-  let progress = noise(y);
-  line(x, y, x, y - progress * y_max);
-  return progress;  
+function pic(begin, end, y, pas){
+  let up = y - noise(y) * pas;
+  let mid = begin + (end-begin) / 2;
+  let down = y - noise(begin) * pas;
+  line(begin, y, mid, up);
+  line(mid, up, end, down);
+  return down;
 }
